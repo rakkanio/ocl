@@ -1,5 +1,3 @@
-include!(concat!(env!("OUT_DIR"), "/methods.rs"));
-
 use risc0_zkvm::guest::env;
 use serde::{Deserialize, Serialize};
 use sha2::{Digest, Sha256};
@@ -17,7 +15,7 @@ pub struct Transaction {
     pub to: [u8; 20],
     pub amount: u64,
     pub nonce: u64,
-    pub signature: Vec<u8>, // Changed from [u8; 64] to Vec<u8>
+    pub signature: Vec<u8>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]

@@ -12,7 +12,7 @@ use types::{Account, BatchInput, BatchOutput, Transaction, WithdrawalProof, Addr
 use merkle::MerkleTree;
 
 // Include the compiled guest code
-// use payment_methods::PAYMENT_BATCH_ELF; // Temporarily disabled
+use payment_methods::{PAYMENT_BATCH_ELF, PAYMENT_BATCH_ID};
 
 #[derive(Parser)]
 #[command(name = "risc-zero-payment")]
@@ -108,7 +108,7 @@ async fn main() -> Result<()> {
                 .find(|acc| acc.address == from_addr)
                 .ok_or_else(|| anyhow::anyhow!("From account not found"))?;
             
-            let tx = Transaction::new(from_addr, to_addr, amount, from_account.nonce);
+            let tx = Transaction::new(from_addr, to_addr, amount, from_account.nonce + 1);
             
             // Load existing transactions
             let tx_data = fs::read_to_string("transactions.json").unwrap_or_else(|_| "[]".to_string());
@@ -160,22 +160,28 @@ async fn main() -> Result<()> {
             // Run the prover
             println!("Generating proof...");
             let prover = default_prover();
-            // let prove_info = prover.prove(env, PAYMENT_BATCH_ELF)?; // Temporarily disabled
+            let prove_info = prover.prove(env, PAYMENT_BATCH_ELF)?;
             
-            // Extract the output (temporarily disabled ZK)
-            // let output: BatchOutput = prove_info.receipt.journal.decode()?;
+            // Extract the output from ZK proof
+            let output: BatchOutput = prove_info.receipt.journal.decode()?;
             
             println!("Batch processed successfully!");
-            println!("  Processed transactions: {}", transactions.len());
+            println!("  Processed transactions: {}", output.processed_count);
+            println!("  New root: 0x{}", hex::encode(output.new_root));
             
-            // Compute new Merkle root from updated accounts
+            // Save receipt
+            let receipt_data = bincode::serialize(&prove_info.receipt).map_err(|e| anyhow::anyhow!("Failed to serialize receipt: {}", e))?;
+            fs::write("receipt.bin", receipt_data)?;
+            println!("Receipt saved to receipt.bin");
+            
+            // Update accounts state based on ZK proof output
             let mut account_map: HashMap<Address, Account> = HashMap::new();
-            for account in accounts {
-                account_map.insert(account.address, account);
+            for account in &accounts {
+                account_map.insert(account.address, account.clone());
             }
             
             // Apply successful transactions
-            for tx in transactions {
+            for tx in &transactions {
                 if let Some(from_account) = account_map.get(&tx.from).cloned() {
                     if tx.is_valid(&from_account) {
                         let mut updated_from = from_account;
@@ -199,9 +205,8 @@ async fn main() -> Result<()> {
             }
             
             let updated_accounts: Vec<Account> = account_map.values().cloned().collect();
-            // Print the new Merkle root here
-            let new_tree = MerkleTree::new(updated_accounts.clone());
-            println!("  New root: 0x{}", hex::encode(new_tree.root));
+            
+
             let updated_json = serde_json::to_string_pretty(&updated_accounts)?;
             fs::write(&accounts_file, updated_json)?;
             println!("Updated accounts saved to {}", accounts_file);
@@ -217,7 +222,7 @@ async fn main() -> Result<()> {
             let receipt: risc0_zkvm::Receipt = bincode::deserialize(&receipt_data).map_err(|e| anyhow::anyhow!("Failed to deserialize receipt: {}", e))?;
             
             // Verify the receipt
-            // receipt.verify(PAYMENT_BATCH_ELF)?; // Temporarily disabled
+            receipt.verify(PAYMENT_BATCH_ID)?;
             
             let output: BatchOutput = receipt.journal.decode()?;
             
