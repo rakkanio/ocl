@@ -17,7 +17,8 @@ RUN rustup target add riscv32imac-unknown-none-elf
 WORKDIR /app
 
 # Copy Rust project files
-COPY Cargo.toml Cargo.lock ./
+COPY Cargo.toml ./
+COPY Cargo.lock* ./
 COPY methods/ ./methods/
 COPY src/ ./src/
 COPY build.rs ./

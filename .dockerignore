@@ -1,6 +1,5 @@
 # Rust build artifacts
 target/
-Cargo.lock
 
 # Node.js dependencies and build artifacts
 zklear-frontend/node_modules/
