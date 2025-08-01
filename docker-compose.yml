@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  zklear:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: zklear-payment-system
+    ports:
+      - "8081:8081"  # API server
+      - "3000:3000"  # React frontend
+    volumes:
+      - ./data:/app/data  # Persistent data storage
+      - ./accounts.json:/app/accounts.json:rw  # Account data
+      - ./transactions.json:/app/transactions.json:rw  # Transaction data
+    environment:
+      - RUST_LOG=info
+      - DATA_DIR=/app/data
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8081/api/system-info"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - zklear-network
+
+networks:
+  zklear-network:
+    driver: bridge
+
+volumes:
+  zklear-data:
+    driver: local 

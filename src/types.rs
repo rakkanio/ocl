@@ -1,22 +1,59 @@
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, ser::Serializer, de::Deserializer};
 use sha2::{Digest, Sha256};
 
 pub type Hash = [u8; 32];
 pub type Address = [u8; 20];
 
+
+
+// Serialization functions for Address type
+fn serialize_address<S>(address: &[u8; 20], serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    let hex_string = format!("0x{}", hex::encode(address));
+    serializer.serialize_str(&hex_string)
+}
+
+fn deserialize_address<'de, D>(deserializer: D) -> Result<[u8; 20], D::Error>
+where
+    D: Deserializer<'de>,
+{
+    let hex_string = String::deserialize(deserializer)?;
+    let hex_string = hex_string.trim_start_matches("0x");
+    let bytes = hex::decode(hex_string).map_err(serde::de::Error::custom)?;
+    if bytes.len() != 20 {
+        return Err(serde::de::Error::custom("Address must be 20 bytes"));
+    }
+    let mut address = [0u8; 20];
+    address.copy_from_slice(&bytes);
+    Ok(address)
+}
+
 #[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]
 pub struct Account {
+    /// The account address as hex string (0x...)
+    #[serde(serialize_with = "serialize_address", deserialize_with = "deserialize_address")]
     pub address: Address,
+    /// The account balance
     pub balance: u64,
+    /// The account nonce (transaction counter)
     pub nonce: u64,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Transaction {
+    /// The sender address as hex string (0x...)
+    #[serde(serialize_with = "serialize_address", deserialize_with = "deserialize_address")]
     pub from: Address,
+    /// The recipient address as hex string (0x...)
+    #[serde(serialize_with = "serialize_address", deserialize_with = "deserialize_address")]
     pub to: Address,
+    /// The transfer amount
     pub amount: u64,
+    /// The transaction nonce
     pub nonce: u64,
+    /// The transaction signature (64 bytes)
     pub signature: Vec<u8>, // Simplified signature
 }
 

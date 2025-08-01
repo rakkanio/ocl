@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zklear API Documentation</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .api-section {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .section-title {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            color: #2d3748;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .endpoint {
+            background: #f7fafc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            margin-right: 10px;
+        }
+
+        .get { background: #48bb78; color: white; }
+        .post { background: #ed8936; color: white; }
+
+        .url {
+            font-family: 'Monaco', 'Menlo', monospace;
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 8px 12px;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .description {
+            margin: 15px 0;
+            color: #4a5568;
+        }
+
+        .params {
+            margin: 15px 0;
+        }
+
+        .param {
+            background: #edf2f7;
+            padding: 10px;
+            border-radius: 4px;
+            margin: 5px 0;
+        }
+
+        .param-name {
+            font-weight: bold;
+            color: #2d3748;
+        }
+
+        .param-type {
+            color: #718096;
+            font-size: 0.9rem;
+        }
+
+        .response {
+            margin: 15px 0;
+        }
+
+        .response-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .example {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            font-size: 0.9rem;
+            overflow-x: auto;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+
+        .status-200 { background: #48bb78; color: white; }
+        .status-400 { background: #f56565; color: white; }
+
+        .base-url {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Monaco', 'Menlo', monospace;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .feature {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .feature-icon {
+            font-size: 2rem;
+            margin-bottom: 15px;
+        }
+
+        .feature h3 {
+            margin-bottom: 10px;
+            color: #2d3748;
+        }
+
+        .feature p {
+            color: #718096;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 Zklear API</h1>
+            <p>Zero-Knowledge Payment System API Documentation</p>
+        </div>
+
+        <div class="base-url">
+            Base URL: <strong>http://localhost:8081</strong>
+        </div>
+
+        <div class="api-section">
+            <h2 class="section-title">📊 System Information</h2>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <span class="url">/api/info</span>
+                <span class="status status-200">200</span>
+                
+                <div class="description">
+                    Get comprehensive system information including current Merkle root, total amounts, account statistics, and system metrics.
+                </div>
+
+                <div class="response">
+                    <div class="response-title">Response:</div>
+                    <div class="example">
+{
+  "current_root": "0x1aa9a81b18e4b6c74aa07f8c8907c537b343e206faa42a50beb9b632ce3049c0",
+  "total_amount": 62500,
+  "account_count": 7,
+  "transaction_count": 1,
+  "system_stats": {
+    "total_accounts_created": 7,
+    "total_transactions_processed": 0,
+    "average_balance": 8928.57,
+    "highest_balance": 15000,
+    "lowest_balance": 5000
+  }
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="api-section">
+            <h2 class="section-title">👥 Account Management</h2>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <span class="url">/api/accounts</span>
+                <span class="status status-200">200</span>
+                
+                <div class="description">
+                    Retrieve all accounts in the system with their balances and nonces.
+                </div>
+
+                <div class="response">
+                    <div class="response-title">Response:</div>
+                    <div class="example">
+[
+  {
+    "address": "0x1234567890abcdef1234567890abcdef12345678",
+    "balance": 10000,
+    "nonce": 0
+  }
+]
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <span class="url">/api/accounts</span>
+                <span class="status status-200">200</span>
+                <span class="status status-400">400</span>
+                
+                <div class="description">
+                    Create a new account with a specific address and initial balance.
+                </div>
+
+                <div class="params">
+                    <div class="response-title">Request Body:</div>
+                    <div class="param">
+                        <span class="param-name">address</span>
+                        <span class="param-type">string (hex format: 0x...)</span>
+                        <div>Account address in hex format (20 bytes)</div>
+                    </div>
+                    <div class="param">
+                        <span class="param-name">balance</span>
+                        <span class="param-type">integer</span>
+                        <div>Initial balance for the account</div>
+                    </div>
+                </div>
+
+                <div class="example">
+{
+  "address": "0x1234567890abcdef1234567890abcdef12345678",
+  "balance": 10000
+}
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <span class="url">/api/accounts/create</span>
+                <span class="status status-200">200</span>
+                
+                <div class="description">
+                    Create a new account with a randomly generated address and specified balance.
+                </div>
+
+                <div class="params">
+                    <div class="response-title">Request Body:</div>
+                    <div class="param">
+                        <span class="param-name">balance</span>
+                        <span class="param-type">integer</span>
+                        <div>Initial balance for the account</div>
+                    </div>
+                </div>
+
+                <div class="example">
+{
+  "balance": 10000
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="api-section">
+            <h2 class="section-title">💸 Transaction Operations</h2>
+            
+            <div class="endpoint">
+                <span class="method get">GET</span>
+                <span class="url">/api/transactions</span>
+                <span class="status status-200">200</span>
+                
+                <div class="description">
+                    Retrieve all transactions in the system.
+                </div>
+
+                <div class="response">
+                    <div class="response-title">Response:</div>
+                    <div class="example">
+[
+  {
+    "from": "0x1234567890abcdef1234567890abcdef12345678",
+    "to": "0xabcdef1234567890abcdef1234567890abcdef12",
+    "amount": 1000,
+    "nonce": 1,
+    "signature": "base64_encoded_signature"
+  }
+]
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <span class="url">/api/transactions</span>
+                <span class="status status-200">200</span>
+                <span class="status status-400">400</span>
+                
+                <div class="description">
+                    Create a new transaction between two accounts.
+                </div>
+
+                <div class="params">
+                    <div class="response-title">Request Body:</div>
+                    <div class="param">
+                        <span class="param-name">from</span>
+                        <span class="param-type">string (hex format: 0x...)</span>
+                        <div>Sender account address</div>
+                    </div>
+                    <div class="param">
+                        <span class="param-name">to</span>
+                        <span class="param-type">string (hex format: 0x...)</span>
+                        <div>Recipient account address</div>
+                    </div>
+                    <div class="param">
+                        <span class="param-name">amount</span>
+                        <span class="param-type">integer</span>
+                        <div>Amount to transfer</div>
+                    </div>
+                </div>
+
+                <div class="example">
+{
+  "from": "0x1234567890abcdef1234567890abcdef12345678",
+  "to": "0xabcdef1234567890abcdef1234567890abcdef12",
+  "amount": 1000
+}
+                </div>
+            </div>
+        </div>
+
+        <div class="api-section">
+            <h2 class="section-title">⚡ Batch Processing</h2>
+            
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <span class="url">/api/batch/process</span>
+                <span class="status status-200">200</span>
+                <span class="status status-400">400</span>
+                
+                <div class="description">
+                    Process all pending transactions in a batch using zero-knowledge proofs. This updates account balances and generates a new Merkle root.
+                </div>
+
+                <div class="response">
+                    <div class="response-title">Response:</div>
+                    <div class="example">
+{
+  "success": true,
+  "message": "Batch processed successfully",
+  "processed_count": 3,
+  "new_root": "0x2bb9b82c29f5c7d85b08f9c8908d648c454e317fbb43b51beb9b632ce3049c1",
+  "receipt_saved": true
+}
+                    </div>
+                </div>
+            </div>
+
+            <div class="endpoint">
+                <span class="method post">POST</span>
+                <span class="url">/api/receipt/verify</span>
+                <span class="status status-200">200</span>
+                
+                <div class="description">
+                    Verify a zero-knowledge proof receipt to ensure the batch processing was valid.
+                </div>
+
+                <div class="response">
+                    <div class="response-title">Response:</div>
+                    <div class="example">
+{
+  "success": true,
+  "message": "Receipt verified successfully",
+  "new_root": "0x2bb9b82c29f5c7d85b08f9c8908d648c454e317fbb43b51beb9b632ce3049c1",
+  "processed_count": 3
+}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">🔐</div>
+                <h3>Zero-Knowledge Proofs</h3>
+                <p>All transactions are processed with cryptographic proofs ensuring privacy and correctness.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">🌳</div>
+                <h3>Merkle Tree State</h3>
+                <p>Efficient state management using Merkle trees for verifiable account balances.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">⚡</div>
+                <h3>Batch Processing</h3>
+                <p>Process multiple transactions efficiently in a single batch operation.</p>
+            </div>
+            <div class="feature">
+                <div class="feature-icon">📊</div>
+                <h3>Real-time Statistics</h3>
+                <p>Comprehensive system metrics and account statistics available in real-time.</p>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

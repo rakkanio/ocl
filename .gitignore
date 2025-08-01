@@ -2,24 +2,53 @@
 target/
 Cargo.lock
 
-# IDE files
+# Node.js dependencies and build artifacts
+zklear-frontend/node_modules/
+zklear-frontend/build/
+zklear-frontend/.env
+zklear-frontend/.env.local
+zklear-frontend/.env.development.local
+zklear-frontend/.env.test.local
+zklear-frontend/.env.production.local
+zklear-frontend/npm-debug.log*
+zklear-frontend/yarn-debug.log*
+zklear-frontend/yarn-error.log*
+
+# IDE and editor files
 .vscode/
 .idea/
 *.swp
 *.swo
+*~
 
-# OS files
+# OS generated files
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
 
-# Logs
-*.log
+# Git
+.git/
+.gitignore
 
-# Runtime files
+# Docker files (keep these for now)
+# Dockerfile
+# docker-compose.yml
+# .dockerignore
+
+# Runtime files (will be created by container)
 accounts.json
 transactions.json
 receipt.bin
+data/
 
-# Environment files
-.env
-.env.local 
+# Logs
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.temp 

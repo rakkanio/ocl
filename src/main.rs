@@ -1,5 +1,6 @@
 mod types;
 mod merkle;
+mod api;
 
 use anyhow::Result;
 use clap::{Parser, Subcommand};
@@ -7,6 +8,12 @@ use risc0_zkvm::{default_prover, ExecutorEnv};
 use serde_json;
 use std::collections::HashMap;
 use std::fs;
+use std::sync::Arc;
+use tokio::sync::Mutex;
+use axum::{
+    routing::Router,
+    http::Method,
+};
 
 use types::{Account, BatchInput, BatchOutput, Transaction, WithdrawalProof, Address, Hash};
 use merkle::MerkleTree;
@@ -49,6 +56,11 @@ enum Commands {
     Verify {
         #[arg(short, long, default_value = "receipt.bin")]
         receipt_file: String,
+    },
+    /// Start the API server
+    Serve {
+        #[arg(short, long, default_value = "8080")]
+        port: u16,
     },
 }
 
@@ -230,8 +242,67 @@ async fn main() -> Result<()> {
             println!("  Processed transactions: {}", output.processed_count);
             println!("  New root: 0x{}", hex::encode(output.new_root));
         }
+
+        Commands::Serve { port } => {
+            println!("Starting API server on port {}...", port);
+            
+            // Load initial state
+            let accounts = load_accounts("accounts.json").unwrap_or_else(|_| vec![]);
+            let transactions = load_transactions("transactions.json").unwrap_or_else(|_| vec![]);
+            
+            // Create app state
+            let state = api::AppState {
+                accounts: Arc::new(Mutex::new(accounts)),
+                transactions: Arc::new(Mutex::new(transactions)),
+            };
+            
+            let app = api::create_router(state);
+            
+            // Start server
+            let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port)).await?;
+            println!("API server running at http://localhost:{}", port);
+            println!("Available endpoints:");
+            println!("  GET  /api/info - System information");
+            println!("  GET  /api/accounts - List accounts");
+            println!("  POST /api/accounts - Create account");
+            println!("  GET  /api/transactions - List transactions");
+            println!("  POST /api/transactions - Create transaction");
+            println!("  POST /api/batch/process - Process batch");
+            println!("  POST /api/receipt/verify - Verify receipt");
+            
+            axum::serve(listener, app).await?;
+        }
     }
 
+    Ok(())
+}
+
+// Helper functions for loading/saving data
+pub fn load_accounts(filename: &str) -> Result<Vec<Account>> {
+    if !std::path::Path::new(filename).exists() {
+        return Ok(vec![]);
+    }
+    let content = fs::read_to_string(filename)?;
+    Ok(serde_json::from_str(&content)?)
+}
+
+pub fn load_transactions(filename: &str) -> Result<Vec<Transaction>> {
+    if !std::path::Path::new(filename).exists() {
+        return Ok(vec![]);
+    }
+    let content = fs::read_to_string(filename)?;
+    Ok(serde_json::from_str(&content)?)
+}
+
+pub fn save_accounts(accounts: &[Account]) -> Result<()> {
+    let json = serde_json::to_string_pretty(accounts)?;
+    fs::write("accounts.json", json)?;
+    Ok(())
+}
+
+pub fn save_transactions(transactions: &[Transaction]) -> Result<()> {
+    let json = serde_json::to_string_pretty(transactions)?;
+    fs::write("transactions.json", json)?;
     Ok(())
 }
 
