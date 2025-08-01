@@ -13,6 +13,7 @@ use crate::{Account, Transaction, MerkleTree};
 use rand::Rng;
 use risc0_zkvm;
 use bincode;
+use payment_methods::{PAYMENT_BATCH_ELF, PAYMENT_BATCH_ID};
 
 // API State
 #[derive(Clone)]
@@ -373,7 +374,7 @@ async fn process_batch(
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
     
     let prover = risc0_zkvm::default_prover();
-    let prove_info = prover.prove(env, crate::PAYMENT_BATCH_ELF)
+    let prove_info = prover.prove(env, PAYMENT_BATCH_ELF)
         .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
     
     // Extract the output from ZK proof
