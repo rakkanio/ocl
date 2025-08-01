@@ -130,7 +130,7 @@ pub fn create_router(state: AppState) -> Router {
         .route("/api/transactions/create", post(create_transaction))
         .route("/api/batch/process", post(process_batch))
         .route("/api/receipt/verify", post(verify_receipt))
-        .nest_service("/", ServeDir::new("zklear-frontend/build"))
+        .nest_service("/", ServeDir::new("frontend"))
         .with_state(state)
 }
 
