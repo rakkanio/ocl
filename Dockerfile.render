@@ -58,11 +58,13 @@ COPY --from=rust-builder /app/target/release/host /app/zklear-server
 # Copy built React app
 COPY --from=node-builder /app/frontend/build /app/frontend
 
-# Copy any runtime files
-COPY accounts.json transactions.json ./
-
 # Create necessary directories and set permissions
 RUN mkdir -p /app/data && chown -R appuser:appuser /app
+
+# Create initial runtime files
+RUN echo '[]' > /app/accounts.json && \
+    echo '[]' > /app/transactions.json && \
+    chown appuser:appuser /app/accounts.json /app/transactions.json
 
 # Switch to non-root user
 USER appuser
