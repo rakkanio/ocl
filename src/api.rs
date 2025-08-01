@@ -360,7 +360,7 @@ async fn process_batch(
     
     // Create batch input for ZK proof generation
     let tree = MerkleTree::new(accounts.clone());
-    let batch_input = crate::BatchInput {
+    let _batch_input = crate::BatchInput {
         prev_root: tree.root,
         accounts: accounts.clone(),
         transactions: transactions.clone(),
