@@ -12,10 +12,9 @@ use std::sync::Arc;
 use tokio::sync::Mutex;
 use axum::{
     routing::Router,
-    http::Method,
 };
 
-use types::{Account, BatchInput, BatchOutput, Transaction, WithdrawalProof, Address, Hash};
+use types::{Account, BatchInput, BatchOutput, Transaction, Address};
 use merkle::MerkleTree;
 
 // Include the compiled guest code

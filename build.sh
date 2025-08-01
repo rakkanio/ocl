@@ -4,6 +4,12 @@
 
 echo "🚀 Starting Zklear build for Render..."
 
+# Install RISC Zero toolchain
+echo "🔧 Installing RISC Zero toolchain..."
+cargo install rzup
+rzup install rust
+rustup target add riscv32imac-unknown-none-elf
+
 # Build the Rust application
 echo "🔨 Building Rust backend..."
 cargo build --release

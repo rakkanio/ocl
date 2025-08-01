@@ -13,5 +13,5 @@ services:
         value: info
       - key: RUST_BACKTRACE
         value: 1
-    buildCommand: ./build.sh
+    buildCommand: ./build-render.sh
     startCommand: ./start.sh 
