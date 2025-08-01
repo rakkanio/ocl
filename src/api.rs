@@ -344,6 +344,7 @@ async fn create_transaction(
 }
 
 /// Process all pending transactions in a batch
+#[axum::debug_handler]
 async fn process_batch(
     State(state): State<AppState>,
 ) -> Result<Json<ProcessBatchResponse>, StatusCode> {
@@ -420,7 +421,6 @@ async fn process_batch(
     }
     
     let updated_accounts: Vec<crate::Account> = account_map.values().cloned().collect();
-    let processed_count = transactions.len() as u32;
     
     // Calculate new root from ZK proof output
     let new_root = format!("0x{}", hex::encode(output.new_root));
