@@ -466,6 +466,24 @@ const Dashboard: React.FC = () => {
                 <li>Merkle root updated cryptographically</li>
                 <li>All transactions verified and processed</li>
               </ul>
+              
+              <div style={{ marginTop: '1rem', textAlign: 'center' }}>
+                <button 
+                  onClick={() => window.open('/api/receipt/download', '_blank')}
+                  style={{
+                    background: '#2d3748',
+                    color: 'white',
+                    border: 'none',
+                    padding: '0.75rem 1.5rem',
+                    borderRadius: '6px',
+                    cursor: 'pointer',
+                    fontSize: '0.9rem',
+                    fontWeight: '600'
+                  }}
+                >
+                  📥 Download ZK Proof Receipt
+                </button>
+              </div>
             </div>
           </div>
         ) : (

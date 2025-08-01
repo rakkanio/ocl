@@ -1,10 +1,12 @@
 use axum::{
     extract::State,
     http::StatusCode,
-    response::Json,
+    response::{Json, Response},
     routing::{get, post},
     Router,
 };
+use axum::body::Body;
+use axum::http::header;
 use tower_http::services::ServeDir;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
@@ -130,6 +132,7 @@ pub fn create_router(state: AppState) -> Router {
         .route("/api/transactions/create", post(create_transaction))
         .route("/api/batch/process", post(process_batch))
         .route("/api/receipt/verify", post(verify_receipt))
+        .route("/api/receipt/download", get(download_receipt))
         .nest_service("/", ServeDir::new("frontend"))
         .with_state(state)
 }
@@ -413,6 +416,24 @@ async fn process_batch(
         new_root: Some(new_root),
         receipt_saved: true,
     }))
+}
+
+/// Download the ZK proof receipt
+async fn download_receipt() -> Result<Response<Body>, StatusCode> {
+    // Try to read the receipt file
+    let receipt_data = std::fs::read("receipt.bin")
+        .map_err(|_| StatusCode::NOT_FOUND)?;
+    
+    // Create response with file download headers
+    let response = Response::builder()
+        .status(StatusCode::OK)
+        .header(header::CONTENT_TYPE, "application/octet-stream")
+        .header(header::CONTENT_DISPOSITION, "attachment; filename=\"zk_proof_receipt.bin\"")
+        .header(header::CONTENT_LENGTH, receipt_data.len().to_string())
+        .body(Body::from(receipt_data))
+        .map_err(|_| StatusCode::INTERNAL_SERVER_ERROR)?;
+    
+    Ok(response)
 }
 
 /// Verify a ZK proof receipt
