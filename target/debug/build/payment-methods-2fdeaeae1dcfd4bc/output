@@ -1,0 +1,11 @@
+cargo:rerun-if-env-changed=RISC0_SKIP_BUILD
+Building guest package payment-methods.payment-guest
+cargo:rerun-if-env-changed=RISC0_SKIP_BUILD
+Using rustc: /Users/marco/.rustup/toolchains/risc0/bin/rustc
+cargo:rerun-if-env-changed=RISC0_RUST_SRC
+Building guest package: cargo build --target riscv32im-risc0-zkvm-elf
+cargo:rerun-if-env-changed=RISC0_BUILD_DEBUG
+cargo:rerun-if-env-changed=RISC0_BUILD_DEBUG
+cargo:rerun-if-env-changed=RISC0_SKIP_BUILD
+cargo:rerun-if-env-changed=RISC0_SKIP_BUILD
+cargo:rerun-if-changed=/Users/marco/risc-zero/ocl/target/debug/build/payment-methods-2fdeaeae1dcfd4bc/out/methods.rs

@@ -22,7 +22,7 @@ bincode = "1.3"
 payment-methods = { path = "methods" }
 axum = { version = "0.7", features = ["macros"] }
 tower = "0.4"
-tower-http = { version = "0.5", features = ["cors"] }
+tower-http = { version = "0.5", features = ["cors", "fs"] }
 rand = "0.8"
 
 [build-dependencies]

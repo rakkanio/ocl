@@ -1,6 +1,8 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:8081';
+// Use environment variable for API URL, fallback to localhost for development
+// For Render deployment, we'll use relative URLs since API and frontend are on same domain
+const API_BASE_URL = process.env.REACT_APP_API_URL || (window.location.hostname === 'localhost' ? 'http://localhost:8081' : '');
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -76,7 +78,7 @@ export const apiService = {
 
   // System info
   getSystemInfo: async (): Promise<SystemInfo> => {
-    const response = await api.get('/api/info');
+    const response = await api.get('/api/system-info');
     return response.data;
   },
 
@@ -87,7 +89,7 @@ export const apiService = {
   },
 
   createAccount: async (data: CreateAccountRequest): Promise<CreateAccountResponse> => {
-    const response = await api.post('/api/accounts', data);
+    const response = await api.post('/api/accounts/create', data);
     return response.data;
   },
 
@@ -103,7 +105,7 @@ export const apiService = {
   },
 
   createTransaction: async (data: CreateTransactionRequest): Promise<CreateTransactionResponse> => {
-    const response = await api.post('/api/transactions', data);
+    const response = await api.post('/api/transactions/create', data);
     return response.data;
   },
 

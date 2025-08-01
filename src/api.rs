@@ -1,10 +1,11 @@
 use axum::{
     extract::State,
     http::StatusCode,
-    response::Json,
+    response::{Json, Html},
     routing::{get, post},
     Router,
 };
+use tower_http::services::ServeDir;
 use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 use tokio::sync::Mutex;
@@ -122,15 +123,14 @@ pub struct SystemStats {
 // API Routes
 pub fn create_router(state: AppState) -> Router {
     Router::new()
-        .route("/api/info", get(get_system_info))
+        .route("/api/system-info", get(get_system_info))
         .route("/api/accounts", get(get_accounts))
-        .route("/api/accounts", post(create_account))
         .route("/api/accounts/create", post(create_account_with_balance))
         .route("/api/transactions", get(get_transactions))
-        .route("/api/transactions", post(create_transaction))
+        .route("/api/transactions/create", post(create_transaction))
         .route("/api/batch/process", post(process_batch))
         .route("/api/receipt/verify", post(verify_receipt))
-
+        .nest_service("/", ServeDir::new("zklear-frontend/build"))
         .with_state(state)
 }
 

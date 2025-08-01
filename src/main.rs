@@ -244,6 +244,12 @@ async fn main() -> Result<()> {
         }
 
         Commands::Serve { port } => {
+            // Use PORT environment variable for Render, fallback to provided port
+            let port = std::env::var("PORT")
+                .ok()
+                .and_then(|p| p.parse::<u16>().ok())
+                .unwrap_or(port);
+            
             println!("Starting API server on port {}...", port);
             
             // Load initial state
@@ -258,15 +264,15 @@ async fn main() -> Result<()> {
             
             let app = api::create_router(state);
             
-            // Start server
+            // Start server - bind to 0.0.0.0 for Render
             let listener = tokio::net::TcpListener::bind(format!("0.0.0.0:{}", port)).await?;
-            println!("API server running at http://localhost:{}", port);
+            println!("API server running on port {}", port);
             println!("Available endpoints:");
-            println!("  GET  /api/info - System information");
+            println!("  GET  /api/system-info - System information");
             println!("  GET  /api/accounts - List accounts");
-            println!("  POST /api/accounts - Create account");
+            println!("  POST /api/accounts/create - Create account");
             println!("  GET  /api/transactions - List transactions");
-            println!("  POST /api/transactions - Create transaction");
+            println!("  POST /api/transactions/create - Create transaction");
             println!("  POST /api/batch/process - Process batch");
             println!("  POST /api/receipt/verify - Verify receipt");
             
