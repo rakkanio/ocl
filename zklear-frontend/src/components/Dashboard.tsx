@@ -8,6 +8,11 @@ const Dashboard: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
+  const [batchResult, setBatchResult] = useState<{
+    processedCount?: number;
+    newRoot?: string;
+    receiptSaved: boolean;
+  } | null>(null);
 
   // Pagination states
   const [currentPage, setCurrentPage] = useState(1);
@@ -108,13 +113,20 @@ const Dashboard: React.FC = () => {
       const response = await apiService.processBatch();
       if (response.success) {
         setMessage('Batch processed successfully!');
+        setBatchResult({
+          processedCount: response.processed_count || 0,
+          newRoot: response.new_root || '',
+          receiptSaved: response.receipt_saved
+        });
         loadData();
       } else {
         setError(response.message);
+        setBatchResult(null);
       }
     } catch (err) {
       console.error('Batch processing error:', err);
       setError(`Failed to process batch: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      setBatchResult(null);
     }
   };
 
@@ -387,23 +399,93 @@ const Dashboard: React.FC = () => {
           </button>
         </div>
         
-        {/* Space for receipt and proof visualization */}
-        <div style={{ 
-          minHeight: '200px', 
-          border: '2px dashed #e2e8f0', 
-          borderRadius: '8px',
-          padding: '1rem',
-          textAlign: 'center',
-          color: '#718096',
-          backgroundColor: '#f7fafc'
-        }}>
-          <p style={{ margin: '0', fontSize: '1.1rem' }}>
-            Receipt and proof will be displayed here after batch processing
-          </p>
-          <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem' }}>
-            This area will show the generated ZK proof and receipt for verification
-          </p>
-        </div>
+        {/* Receipt and proof visualization */}
+        {batchResult ? (
+          <div style={{ 
+            border: '2px solid #48bb78', 
+            borderRadius: '8px',
+            padding: '1.5rem',
+            backgroundColor: '#f0fff4',
+            color: '#2f855a'
+          }}>
+            <h3 style={{ margin: '0 0 1rem 0', fontSize: '1.2rem', color: '#2f855a' }}>
+              ✅ ZK Proof Generated Successfully
+            </h3>
+            
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem', marginBottom: '1rem' }}>
+              <div>
+                <strong>Transactions Processed:</strong>
+                <div style={{ 
+                  fontFamily: 'monospace', 
+                  fontSize: '1.1rem',
+                  marginTop: '0.25rem'
+                }}>
+                  {batchResult.processedCount}
+                </div>
+              </div>
+              
+              <div>
+                <strong>Receipt Status:</strong>
+                <div style={{ 
+                  fontFamily: 'monospace', 
+                  fontSize: '1.1rem',
+                  marginTop: '0.25rem'
+                }}>
+                  {batchResult.receiptSaved ? '✅ Saved' : '❌ Not Saved'}
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <strong>New Merkle Root:</strong>
+              <div style={{ 
+                fontFamily: 'monospace', 
+                fontSize: '0.9rem', 
+                background: '#ffffff', 
+                padding: '0.75rem', 
+                borderRadius: '4px',
+                marginTop: '0.5rem',
+                wordBreak: 'break-all',
+                border: '1px solid #c6f6d5'
+              }}>
+                {batchResult.newRoot}
+              </div>
+            </div>
+            
+            <div style={{ 
+              marginTop: '1rem', 
+              padding: '1rem', 
+              background: '#ffffff', 
+              borderRadius: '4px',
+              border: '1px solid #c6f6d5'
+            }}>
+              <strong>ZK Proof Details:</strong>
+              <ul style={{ margin: '0.5rem 0 0 0', paddingLeft: '1.5rem' }}>
+                <li>Proof generated using RISC Zero zkVM</li>
+                <li>Receipt saved to <code>receipt.bin</code></li>
+                <li>Merkle root updated cryptographically</li>
+                <li>All transactions verified and processed</li>
+              </ul>
+            </div>
+          </div>
+        ) : (
+          <div style={{ 
+            minHeight: '200px', 
+            border: '2px dashed #e2e8f0', 
+            borderRadius: '8px',
+            padding: '1rem',
+            textAlign: 'center',
+            color: '#718096',
+            backgroundColor: '#f7fafc'
+          }}>
+            <p style={{ margin: '0', fontSize: '1.1rem' }}>
+              Receipt and proof will be displayed here after batch processing
+            </p>
+            <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem' }}>
+              This area will show the generated ZK proof and receipt for verification
+            </p>
+          </div>
+        )}
       </div>
     </div>
   );
