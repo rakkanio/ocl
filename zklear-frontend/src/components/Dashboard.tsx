@@ -193,6 +193,7 @@ const Dashboard: React.FC = () => {
         </div>
       )}
 
+      {/* Accounts Section */}
       <div className="grid grid-2">
         {/* Create Account */}
         <div className="card">
@@ -212,57 +213,6 @@ const Dashboard: React.FC = () => {
           </button>
         </div>
 
-        {/* Create Transaction */}
-        <div className="card">
-          <h2 className="card-title">Create Transaction</h2>
-          <div className="form-group">
-            <label className="form-label">From Address</label>
-            <input
-              type="text"
-              className="form-input"
-              placeholder="0x..."
-              value={newTransaction.from}
-              onChange={(e) => setNewTransaction({...newTransaction, from: e.target.value})}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">To Address</label>
-            <input
-              type="text"
-              className="form-input"
-              placeholder="0x..."
-              value={newTransaction.to}
-              onChange={(e) => setNewTransaction({...newTransaction, to: e.target.value})}
-            />
-          </div>
-          <div className="form-group">
-            <label className="form-label">Amount</label>
-            <input
-              type="number"
-              className="form-input"
-              placeholder="Enter amount"
-              value={newTransaction.amount}
-              onChange={(e) => setNewTransaction({...newTransaction, amount: e.target.value})}
-            />
-          </div>
-          <button className="btn" onClick={handleCreateTransaction}>
-            Create Transaction
-          </button>
-        </div>
-      </div>
-
-      {/* Batch Processing */}
-              <div className="card">
-          <h2 className="card-title">Batch Processing</h2>
-        <p className="card-subtitle">
-          Process all pending transactions with zero-knowledge proofs
-        </p>
-        <button className="btn" onClick={handleProcessBatch}>
-          Process Batch
-        </button>
-      </div>
-
-      <div className="grid grid-2">
         {/* Accounts List */}
         <div className="card">
           <h2 className="card-title">Accounts</h2>
@@ -358,6 +308,47 @@ const Dashboard: React.FC = () => {
             </>
           )}
         </div>
+      </div>
+
+      {/* Transactions Section */}
+      <div className="grid grid-2">
+        {/* Create Transaction */}
+        <div className="card">
+          <h2 className="card-title">Create Transaction</h2>
+          <div className="form-group">
+            <label className="form-label">From Address</label>
+            <input
+              type="text"
+              className="form-input"
+              placeholder="0x..."
+              value={newTransaction.from}
+              onChange={(e) => setNewTransaction({...newTransaction, from: e.target.value})}
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">To Address</label>
+            <input
+              type="text"
+              className="form-input"
+              placeholder="0x..."
+              value={newTransaction.to}
+              onChange={(e) => setNewTransaction({...newTransaction, to: e.target.value})}
+            />
+          </div>
+          <div className="form-group">
+            <label className="form-label">Amount</label>
+            <input
+              type="number"
+              className="form-input"
+              placeholder="Enter amount"
+              value={newTransaction.amount}
+              onChange={(e) => setNewTransaction({...newTransaction, amount: e.target.value})}
+            />
+          </div>
+          <button className="btn" onClick={handleCreateTransaction}>
+            Create Transaction
+          </button>
+        </div>
 
         {/* Transactions List */}
         <div className="card">
@@ -381,6 +372,37 @@ const Dashboard: React.FC = () => {
               ))}
             </ul>
           )}
+        </div>
+      </div>
+
+      {/* Batch Processing Section */}
+      <div className="card" style={{ marginTop: '2rem' }}>
+        <h2 className="card-title">Batch Processing</h2>
+        <p className="card-subtitle">
+          Process all pending transactions with zero-knowledge proofs
+        </p>
+        <div style={{ marginBottom: '1rem' }}>
+          <button className="btn" onClick={handleProcessBatch}>
+            Process Batch
+          </button>
+        </div>
+        
+        {/* Space for receipt and proof visualization */}
+        <div style={{ 
+          minHeight: '200px', 
+          border: '2px dashed #e2e8f0', 
+          borderRadius: '8px',
+          padding: '1rem',
+          textAlign: 'center',
+          color: '#718096',
+          backgroundColor: '#f7fafc'
+        }}>
+          <p style={{ margin: '0', fontSize: '1.1rem' }}>
+            Receipt and proof will be displayed here after batch processing
+          </p>
+          <p style={{ margin: '0.5rem 0 0 0', fontSize: '0.9rem' }}>
+            This area will show the generated ZK proof and receipt for verification
+          </p>
         </div>
       </div>
     </div>
