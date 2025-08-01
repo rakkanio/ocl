@@ -23,6 +23,9 @@ COPY methods/ ./methods/
 COPY src/ ./src/
 COPY build.rs ./
 
+# Debug: List files to verify copying
+RUN ls -la src/ && echo "Files in src directory:"
+
 # Build the Rust application
 RUN cargo build --release
 
