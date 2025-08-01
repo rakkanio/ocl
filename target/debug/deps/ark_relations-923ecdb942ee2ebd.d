@@ -1,0 +1,10 @@
+/Users/marco/risc-zero/ocl/target/debug/deps/ark_relations-923ecdb942ee2ebd.d: /Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/lib.rs /Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/mod.rs /Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/impl_lc.rs /Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/constraint_system.rs /Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/error.rs /Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/trace.rs
+
+/Users/marco/risc-zero/ocl/target/debug/deps/libark_relations-923ecdb942ee2ebd.rmeta: /Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/lib.rs /Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/mod.rs /Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/impl_lc.rs /Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/constraint_system.rs /Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/error.rs /Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/trace.rs
+
+/Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/lib.rs:
+/Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/mod.rs:
+/Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/impl_lc.rs:
+/Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/constraint_system.rs:
+/Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/error.rs:
+/Users/marco/.cargo/registry/src/index.crates.io-1949cf8c6b5b557f/ark-relations-0.4.0/src/r1cs/trace.rs:
